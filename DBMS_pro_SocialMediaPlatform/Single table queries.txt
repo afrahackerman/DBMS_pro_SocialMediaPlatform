@@ -1,0 +1,33 @@
+# Lists users created after May 1, 2025.
+SELECT username, created_at 
+FROM users 
+WHERE created_at >TO_TIMESTAMP('2025-05-01', 'YYYY-MM-DD')
+
+#posts that are drafts
+SELECT * FROM posts WHERE status = 'draft'
+
+#Lists replies to comment with ID 1.
+SELECT user_id,reply_text 
+FROM reply 
+WHERE comment_id = 1
+
+#posts liked by user id= 2
+SELECT post_id FROM likes WHERE user_id = 2
+
+#post that have the word coffee
+SELECT * FROM posts WHERE LOWER(body) LIKE '%coffee%'
+
+# Counts the total number of posts.
+SELECT COUNT(*) AS total_posts FROM posts
+
+#Shows users following user with ID 2.
+SELECT following_user_id FROM follows WHERE followed_user_id = 1
+
+#users with bio lenght greater than 10
+SELECT user_id,bio FROM user_profile WHERE LENGTH(bio) > 10;
+
+# Shows comments by user with ID 1
+SELECT user_id, comment_text FROM comments WHERE user_id = 1
+
+
+#Finds users who commented using the word 'great.'
