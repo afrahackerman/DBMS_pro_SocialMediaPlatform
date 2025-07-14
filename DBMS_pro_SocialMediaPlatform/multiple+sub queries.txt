@@ -1,0 +1,123 @@
+#replies by users
+SELECT u.username,
+r.reply_text,
+c.comment_text
+FROM reply r
+JOIN comments c ON r.comment_id=c.id
+JOIN users u ON r.user_id=u.id;
+
+#thrice
+SELECT u.username,p.title,c.comment_text
+FROM users u
+JOIN posts p ON u.id=p.user_id
+JOIN comments c ON p.id=c.post_id;
+
+
+#post count per user(2 ways)
+SELECT user_id, COUNT(*) AS post_count
+FROM posts
+GROUP BY user_id
+HAVING COUNT(*) > 0
+ORDER BY user_id ASC;
+
+SELECT u.username, COUNT(p.id) AS total_posts
+FROM users u
+JOIN posts p ON u.id = p.user_id
+GROUP BY u.username;
+
+
+
+#most recent comment
+SELECT *
+FROM comments
+WHERE commented_at =(
+SELECT MAX(commented_at) FROM comments);
+
+
+#user who has more than user id 1
+SELECT username
+FROM users u
+WHERE (SELECT COUNT(*) FROM posts p WHERE p.user_id=u.id)>
+(SELECT COUNT(*) FROM posts WHERE user_id=1);
+
+#more than 2 likes
+SELECT title,id
+FROM posts
+WHERE id IN (
+    SELECT post_id
+    FROM likes
+    GROUP BY post_id
+    HAVING COUNT(*) > 2
+);
+
+#Users who have made more posts than the average number of posts
+SELECT user_id, COUNT(*) AS post_count
+FROM posts
+GROUP BY user_id
+HAVING COUNT(*) > (
+    SELECT AVG(post_count) 
+    FROM (
+        SELECT COUNT(*) AS post_count
+        FROM posts
+        GROUP BY user_id
+    )
+);
+
+
+#follows only akjn
+SELECT username
+FROM users
+WHERE id = (SELECT following_user_id 
+FROM follows 
+WHERE followed_user_id = (SELECT id FROM users WHERE username = 'mithy'))
+
+
+#All Follow Relationships
+SELECT u1.username AS follower, u2.username AS followed
+FROM follows f
+JOIN users u1 ON f.following_user_id = u1.id
+JOIN users u2 ON f.followed_user_id = u2.id
+
+#Bio length per user
+SELECT u.username, LENGTH(up.bio) AS bio_length
+FROM users u
+JOIN user_profile up ON u.id = up.user_id;
+
+
+#Comments and replies per user
+SELECT u.username, COUNT(DISTINCT c.id) AS comments_made, COUNT(DISTINCT r.reply_id) AS replies_made
+FROM users u
+LEFT JOIN comments c ON u.id = c.user_id
+LEFT JOIN reply r ON u.id = r.user_id
+GROUP BY u.username;
+
+
+#Users who never posted
+SELECT u.username
+FROM users u
+LEFT JOIN posts p ON u.id = p.user_id
+WHERE p.id IS NULL;
+
+#Followers count per user
+SELECT u.username, COUNT(f.followed_user_id) AS followers
+FROM users u
+JOIN follows f ON u.id = f.followed_user_id
+GROUP BY u.username;
+
+#Most commented posts
+SELECT u.username, COUNT(p.id) AS post_count
+FROM users u
+JOIN posts p ON u.id = p.user_id
+GROUP BY u.username
+HAVING COUNT(p.id) > 0;
+
+#Users who have more than 1 post
+SELECT u.username, COUNT(p.id) AS post_count
+FROM users u
+JOIN posts p ON u.id = p.user_id
+GROUP BY u.username
+HAVING COUNT(p.id) > 0;
+
+
+
+
