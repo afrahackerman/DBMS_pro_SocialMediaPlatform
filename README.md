@@ -55,7 +55,7 @@ This repository contains the source code and documentation for a simplified soci
 - Enhance query performance with indexing.
 
 # Report
-- Full details in `pdf` (33 pages), covering abstract, ERD, normalization, schema, UI, queries, challenges, and conclusion.
+- Full details in `C233456.pdf` (33 pages), covering abstract, ERD, normalization, schema, UI, queries, challenges, and conclusion.
 - References include textbook, Oracle docs, and a YouTube tutorial for PHP-Oracle setup.
 
 # License
